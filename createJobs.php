@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>Create a New Job</h1>
+    <a href="main.php">Back to Main Page</a><br><br>
     <form action="createJobs.php" method="post">
         <label for="job_name">Job Name:</label><br>
         <input type="text" id="job_name" name="job_name" required><br><br>
