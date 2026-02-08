@@ -9,3 +9,6 @@ $conn = new mysqli($servername, $username, $password, $dbname);
     }
 $sql = "";
 ?>
+<?php 
+    include("database.php");
+?>
