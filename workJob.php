@@ -85,6 +85,14 @@ $attempts = $job['attempts'];
             }
             echo $final_status;
         }
+        else if ($_POST['action'] == 'cancel') {
+            // Update job status to CANCELLED
+            $update_stmt = $conn->prepare("UPDATE jobs SET status = 'CANCELLED', updated_at = ? WHERE job_id = ?");
+            $update_stmt->bind_param("ss", $date_updated, $job_id);
+            $update_stmt->execute();
+            $update_stmt->close();
+            echo "Job Cancelled";
+        }
 }
 
 

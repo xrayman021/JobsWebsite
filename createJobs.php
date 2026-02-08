@@ -41,17 +41,20 @@
         $job_name = $_POST["job_name"];
         $type = $_POST["type"];
         $payload = $_POST["payload"];
-        //$status = "QUEUED";
-        //$attempts = 0;
+        $job_name_check = "SELECT job_name FROM jobs WHERE job_name = '$job_name'";
+        $job_name_result = $conn->query($job_name_check);
+        if($job_name_result->num_rows > 0){
+            die("Job name already exists. Please choose a different name.");
+        }
+        else{
         
-
-
-        $sql = "INSERT INTO jobs (job_name, job_id, type, payload) VALUES ( '$job_name', '$jobId', '$type', '$payload')";
-        
-        if ($conn->query($sql) === TRUE) {
-            echo "New job created successfully with Job ID: " . $jobId;
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;
+            $sql = "INSERT INTO jobs (job_name, job_id, type, payload) VALUES ( '$job_name', '$jobId', '$type', '$payload')";
+            
+            if ($conn->query($sql) === TRUE) {
+                echo "New job created successfully with Job ID: " . $jobId;
+            } else {
+                echo "Error: " . $sql . "<br>" . $conn->error;
+            }
         }
     }
 
