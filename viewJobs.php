@@ -18,7 +18,12 @@
         if ($result->num_rows > 0) {
             // Output data of each row
             while($row = $result->fetch_assoc()) {
-                echo "Job Name: " . $row["job_name"]. " - Job ID: " . $row["job_id"]. " - Type: " . $row["type"]. " - Payload: " . $row["payload"]. "<br><br>";
+                echo "<div style='border: 1px solid #ccc; padding: 10px; margin: 10px 0;'>";
+                echo "<a href='workJob.php?job_id=" . urlencode($row["job_id"]) . "' style='font-size: 18px; font-weight: bold;'>" . htmlspecialchars($row["job_name"]) . "</a><br>";
+                echo "Job ID: " . htmlspecialchars($row["job_id"]) . "<br>";
+                echo "Type: " . htmlspecialchars($row["type"]) . "<br>";
+                echo "Payload: " . htmlspecialchars($row["payload"]) . "<br>";
+                echo "</div>";
             }
         } else {
             echo "No jobs found.";
@@ -27,8 +32,5 @@
 </body>
 </html>
 <?php  
-
-
-
     mysqli_close($conn);
 ?>
