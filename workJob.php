@@ -61,9 +61,8 @@ $attempts = $job['attempts'];
 
     // Handle form submission for updating job
     if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['action'])) {
-        $attempts += 1;
         $date_updated = date('Y-m-d H:i:s');
-        if ($_POST['action'] == 'attempt') {
+        if ($_POST['action'] == 'attempt' && $attempts < 3) {
             // Update job status to IN_PROGRESS and increment attempts
             $update_stmt = $conn->prepare("UPDATE jobs SET status = 'IN_PROGRESS', attempts = attempts + 1 WHERE job_id = ?");
             $update_stmt->bind_param("s", $job_id);
@@ -78,20 +77,23 @@ $attempts = $job['attempts'];
                 }
 
                 // Update job status based on validation result
-                $update_status_stmt = $conn->prepare(query: "UPDATE jobs SET status = ?, updated_at = ? WHERE job_id = ?");
+                $update_status_stmt = $conn->prepare("UPDATE jobs SET status = ?, updated_at = ? WHERE job_id = ?");
                 $update_status_stmt->bind_param("sss", $final_status, $date_updated, $job_id);
                 $update_status_stmt->execute();
                 $update_status_stmt->close();
             }
             echo $final_status;
         }
-        else if ($_POST['action'] == 'cancel') {
+        else if ($_POST['action'] == 'cancel' && $attempts < 3) {
             // Update job status to CANCELLED
             $update_stmt = $conn->prepare("UPDATE jobs SET status = 'CANCELLED', updated_at = ? WHERE job_id = ?");
             $update_stmt->bind_param("ss", $date_updated, $job_id);
             $update_stmt->execute();
             $update_stmt->close();
             echo "Job Cancelled";
+        }
+        else{
+            echo "Maximum attempts reached. No further actions allowed.";
         }
 }
 
